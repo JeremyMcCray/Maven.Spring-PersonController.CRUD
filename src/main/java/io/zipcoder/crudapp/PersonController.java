@@ -1,6 +1,8 @@
 package io.zipcoder.crudapp;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,26 +13,38 @@ public class PersonController {
 
 
 @Autowired
-PersonRepository personRepository;
-    @PostMapping("/people")
-    Person createPerson(@RequestBody Person p){
+private PersonService personService;
 
-        return null;
+
+
+
+    @PostMapping("/people")
+    public ResponseEntity<Person> createPerson(@RequestBody Person p){
+
+        return new ResponseEntity<>(personService.createPerson(p), HttpStatus.CREATED);
     }
 
     @GetMapping("/people/{id}")
-    Person getPerson(@PathVariable int id){
-        return null;
+    public ResponseEntity<Person> getPerson(@PathVariable int id){
+
+    return new ResponseEntity<>(personService.getPerson(id), HttpStatus.OK);
     }
 
     @GetMapping("/people/all")
-    List<Person> getPersonList(){
-        return null;
+    public ResponseEntity<List<Person>> getPersonList(){
+        return new ResponseEntity<>((List<Person>) personService.getPersonList(),HttpStatus.OK);
     }
 
     @DeleteMapping("/people/{id}")
-    void  deletePerson(@PathVariable int id){
+    public void  deletePerson(@PathVariable int id){
+        personService.deletePerson(id);
+    }
 
+
+    @PutMapping("/people/updateFn/{id}")
+    public ResponseEntity<Person> updateFirstName(@RequestParam  String firstName,@PathVariable Integer id){
+
+        return new ResponseEntity<>(personService.updatePersonFirstName(firstName, id), HttpStatus.CREATED);
     }
 
 }
